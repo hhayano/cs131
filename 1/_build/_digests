@@ -1,0 +1,5 @@
+"Rule: ocaml: ml & cmi -> cmx & o (%=hw1 )": "y4\138u\162Q\005ii\0246\230\200|\183\015"
+"Rule: ocaml dependencies ml (%=hw1 )": "\193D\018s<N=\158-V}\134\221\221\223e"
+"Rule: ocaml: cmx* & o* -> native (%=hw1 )": "j\199f*7\251|\212\028\161/+W;\182\130"
+"Rule: ocaml: ml -> cmo & cmi (%=hw1 )": "\247l\143\1426\161v0\219{\012%\0059\188d"
+"Resource: /home/hajime/cs131/1/hw1.ml": "K'\240b`\1300\133\207\b\227\237\156\005\2525"
