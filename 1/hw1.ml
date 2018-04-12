@@ -3,12 +3,11 @@ open Printf
 
 (* Subset *)
 let rec subset s1 s2 =
-  if s1 = [] then true
-  else 
-  let first = List.hd s1 in
-  match List.mem first s2 with
-  | false -> false
-  | true -> subset (List.tl s1) s2
+  match s1 with
+  [] -> true
+  | s::e -> match mem s s2 with
+  false -> false
+  | true -> subset e s2
 ;;
 
 (* Equal Sets *)
@@ -24,15 +23,6 @@ let rec set_union a b =
   true -> set_union e b
   | false -> set_union e (append b [s])
 ;;
-(*
-  if a = [] then b else
-    let first = List.hd a in
-    let rest = List.tl a in
-    match mem first b with
-    | true -> set_union rest b
-    | false -> set_union rest (List.append b [first])
-;;
-*)
 
 (* Set Intersection *)
 let rec set_intersection a b =
@@ -42,6 +32,19 @@ let rec set_intersection a b =
     true -> s::(set_intersection e b)
     | false -> set_intersection e b
 ;;
+
+(* Set difference *)
+let rec set_diff a b =
+  match a with
+  [] -> []
+  | s::e -> match mem s b with
+  true -> set_diff e b
+  | false -> s::(set_diff e b)
+;;
+
+(* computed fix point *)
+let rec computed_fixed_point eq f x =
+
 
 let print_bool bl =
   match bl with
@@ -55,18 +58,25 @@ let print_list l =
 ;;
 
 (*
+let () = print_bool (subset [] [1;2;3])
+let () = print_bool (subset [3;1;3] [1;2;3])
+let () = print_bool (not (subset [1;3;4] [1;2;3]))
+
 let () = print_bool (equal_sets (set_union [] [1;2;3]) [1;2;3])
 let () = print_bool (equal_sets (set_union [3;1;3] [1;2;3]) [1;2;3])
 let () = print_bool (equal_sets (set_union [] []) [])
-*)
 
 let set_intersection_test0 =
-  print_bool (equal_sets (set_intersection [] [1;2;3]) []);
+  print_bool (equal_sets (set_intersection [] [1;2;3]) [])
 
 let set_intersection_test1 =
-  print_bool (equal_sets (set_intersection [3;1;3] [1;2;3]) [1;3]);
+  print_bool (equal_sets (set_intersection [3;1;3] [1;2;3]) [1;3])
 
 let set_intersection_test2 =
   print_bool (equal_sets (set_intersection [1;2;3;4] [3;1;2;4]) [4;3;2;1])
 
- 
+let () = print_bool (equal_sets (set_diff [1;3] [1;4;3;1]) [])
+let () = print_bool (equal_sets (set_diff [4;3;1;1;3] [1;3]) [4])
+let () = print_bool (equal_sets (set_diff [4;3;1] []) [1;3;4])
+let () = print_bool (equal_sets (set_diff [] [4;3;1]) [])
+*)
