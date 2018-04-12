@@ -1,8 +1,29 @@
-let print str =
-  print_endline str;;
+open List
 
-print "Hi";;
-print "My name is haji";;
+(* Subset *)
+let rec subset s1 s2 =
+  if s1 = [] then true
+  else 
+  let first = List.hd s1 in
+  match List.mem first s2 with
+  | false -> false
+  | true -> subset (List.tl s1) s2
+;;
 
-let x =
-  prompt_string "Enter your name:";;
+(* Equal Sets *)
+let equal_sets a b =
+  (subset a b) && (subset b a)
+;;
+
+let isIn a l =
+  let isEqual c =
+    a = c
+  in
+  List.exists isEqual l
+;;
+
+let () =
+  let bl = equal_sets [1;3;4] [3;1;3] in
+  match bl with
+  | true -> print_endline "true"
+  | false -> print_endline "false";;
