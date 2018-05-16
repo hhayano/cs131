@@ -1,12 +1,13 @@
-/*
- * N: non-negative integer specifying the size of the grid
- * T: a list of N lists. Each list represents a row in the grid.
- * C: a structure with function symbol counts and arity 4.
- *    Its arguments are all lists of N integers, and represent
- *    the tower counts for the top, bottom, left, and right edges, respectively.
- *
- * In this implementation, we expect C and N to be grounded.
- */
+% ==============================
+%     tower() Implementation
+% ==============================
+
+% A1: non-negative integer specifying the size of the grid
+% A2: a list of N lists. Each list represents a row in the grid.
+% A3: a structure with function symbol counts and arity 4.
+%         Its arguments are all lists of N integers, and represent
+%         the tower counts for the top, bottom, left, and right edges, 
+%         respectively.
 
 tower(Size, Grid, counts(Top, Bot, Left, Right)) :-
   left_tower_count_check(Grid, Left, Size, Size),
@@ -15,7 +16,19 @@ tower(Size, Grid, counts(Top, Bot, Left, Right)) :-
   left_tower_count_check(Transpose, Top, Size, Size),
   right_tower_count_check(Transpose, Bot, Size, Size).
 
-left_tower_count_check([], [], _, 0).
+% left_tower_count_check: Checks the matrix against the count representing
+%                         the count of towers seen from the left edge
+%                         of the matrix.
+% A1: A matrix to check. It is expected to be represented as a list of
+%     lists, where each list represents a row in the matrix.
+% A2: A count of towers seen from the left side of the matrix represented
+%     as a list of integers. The first element of the list is the count
+%     for the top most row and the last element is the count of the bottom
+%     most row.
+% A3: An integer representing the size of the matrix. The matrix is 
+%     expected to be a square matrix.
+% A4: An integer representing the number of rows that still needs to be
+%     checked.
 
 left_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, Iterations) :-
   tower_valid_list(First_row, Size),
@@ -23,7 +36,22 @@ left_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, It
   Iterations0 #=# Iterations - 1,
   left_tower_count_check(Rest_rows, Rest_count, Size, Iterations0).
 
-right_tower_count_check([], [], _, 0).
+% Base Case
+left_tower_count_check([], [], _, 0).
+
+% right_tower_count_check: Checks the matrix against the count representing
+%                         the count of towers seen from the left edge
+%                         of the matrix.
+% A1: A matrix to check. It is expected to be represented as a list of
+%     lists, where each list represents a row in the matrix.
+% A2: A count of towers seen from the left side of the matrix represented
+%     as a list of integers. The first element of the list is the count
+%     for the top most row and the last element is the count of the bottom
+%     most row.
+% A3: An integer representing the size of the matrix. The matrix is 
+%     expected to be a square matrix.
+% A4: An integer representing the number of rows that still needs to be
+%     checked.
 
 right_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, Iterations) :-
   reverse(First_row, Reversed),
@@ -32,11 +60,23 @@ right_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, I
   Iterations0 #=# Iterations - 1,
   right_tower_count_check(Rest_rows, Rest_count, Size, Iterations0).
 
-tower_valid_list(Array, Size) :-
-  length(Array, Size),
-  fd_domain(Array, 1, Size),
-  fd_all_different(Array).
+% Base Case
+right_tower_count_check([], [], _, 0).
 
+% tower_valid_list: Verifies that a list does not a duplicate values and 
+%                   only consists of values between 1 and Size.
+% A1: A list to be checked.
+% A2: The specified size of the list
+tower_valid_list(List, Size) :-
+  length(List, Size),
+  fd_domain(List, 1, Size),
+  fd_all_different(List).
+
+% count_check: Counts the number of towers seen in the list.
+% A1: A list to count towers from.
+% A2: A count of the towers seen in the list.
+% A3: Internal variable used to iterate recursively. The caller should always 
+%     use 0 as this argument.
 count_check([First|Tail], Count, Tallest) :-
   First #># Tallest,
   Count0 #=# Count - 1,
@@ -44,6 +84,7 @@ count_check([First|Tail], Count, Tallest) :-
   First #<# Tallest,
   count_check(Tail, Count, Tallest).
 
+% Base Case
 count_check([], 0, _).
 
 % ========================
