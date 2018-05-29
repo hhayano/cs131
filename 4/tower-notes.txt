@@ -1,0 +1,15 @@
+The performance ratio between plain_tower and tower was 5.14 e -5.
+The reason for the large difference is due to the fact that arithmetic operators
+in prolog need to be called on instantiated terms. This means that these 
+arithmetic operators cannot be called on variables, meaning that the program 
+must first guess the matrix/grid before applying the tower count constraint. 
+This is avoided using the fd_constraint library since the library allows us to 
+create constraints on the matrix elements without guessing the actual elements. 
+This reduces the amount of backtracing in the program, allowing the tower 
+implementation to run much much faster than the plain_tower implementation. 
+
+The ambiguous 4x4 counts constraint is 
+Top: [4,2,2,1]
+Bot: [1,2,2,4]
+Left: [1,2,2,4]
+Right: [4,2,2,1]

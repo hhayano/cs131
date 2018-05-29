@@ -120,10 +120,9 @@ plain_tower(Size, Grid, counts(Top, Bot, Left, Right)) :-
 %     checked.
 
 plain_left_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, Iterations) :-
-  valid_list(First_row, Size),
   length([First_row|Rest_rows],Iterations),
-  Iterations0 is Iterations - 1,
   plain_count_check_wrapper(First_row, First_count, Size),
+  Iterations0 is Iterations - 1,
   plain_left_tower_count_check(Rest_rows, Rest_count, Size, Iterations0).
 
 % Base Case
@@ -145,7 +144,6 @@ plain_left_tower_count_check([], [], _, 0).
 
 plain_right_tower_count_check([First_row|Rest_rows], [First_count|Rest_count], Size, Iterations) :-
   reverse(First_row, Reversed),
-  valid_list(Reversed, Size),
   length([First_row|Rest_rows],Iterations),
   plain_count_check_wrapper(Reversed, First_count, Size),
   Iterations0 is Iterations - 1,
@@ -158,6 +156,20 @@ valid_list(List, Size) :-
   length(List, Size),
   create_sorted(Size, Sorted_list),
   permutation(Sorted_list, List).
+
+valid_matrix_wrapper(Matrix, Size) :-
+  valid_matrix(Matrix, Size, Size),
+  transpose(Matrix, Transpose),
+  valid_matrix(Transpose, Size, Size).
+
+valid_matrix([], _, 0).
+
+valid_matrix([H|T], Size, Iterations) :-
+  valid_list(H,Size),
+  length([H|T], Iterations),
+  Iterations0 is Iterations - 1,
+  valid_matrix(T, Size, Iterations0).
+
 
 create_sorted(Size, List) :-
   length(List, Size),
@@ -208,5 +220,43 @@ consColumns([HFirstCol|TFirstCol], [], [[HFirstCol]|TResMtx]) :-
 
 % Base Case
 consColumns([],A,A).
+
+% ==============================
+%     speedup Implementation
+% ==============================
+
+speedup(Result) :-
+  statistics(runtime, _),
+  repeat_tower(10),
+  statistics(runtime, [_,Result_tower]),
+  repeat_tower_plain(10),
+  statistics(runtime, [_,Result_plain]),
+  Result is Result_tower / Result_plain.
+
+repeat_tower(0).
+
+repeat_tower(Iterations) :-
+  tower(5, [[1,4,5,2,3],[2,5,1,3,4],[3,1,2,4,5],[4,2,3,5,1],[5,3,4,1,2]], _),
+  tower(5, _, counts([5,2,1,4,3],[1,2,2,2,2],[3,2,3,2,1],[2,2,1,2,3])),
+  Iterations0 is Iterations - 1,
+  repeat_tower(Iterations0).
+
+repeat_tower_plain(0).
+
+repeat_tower_plain(Iterations) :-
+  plain_tower(5, [[1,4,5,2,3],[2,5,1,3,4],[3,1,2,4,5],[4,2,3,5,1],[5,3,4,1,2]], _),
+  plain_tower(5, _, counts([5,2,1,4,3],[1,2,2,2,2],[3,2,3,2,1],[2,2,1,2,3])),
+  Iterations0 is Iterations - 1,
+  repeat_tower(Iterations0).
+
+
+% ================================
+%     ambiguous Implementation
+% ================================
+
+ambiguous(Size, Counts, T1, T2) :-
+  tower(Size, T1, Counts),
+  tower(Size, T2, Counts),
+  T1 \= T2.
 
 
