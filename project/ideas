@@ -1,0 +1,20 @@
+For server.py
+
+  - takes in one command line arg representing the server name
+  - starts a server with predetermined ports
+
+
+  - Can derive the port number from another file containing all the assigned port numbers
+  - The network communication graph can also be stored in another location/file
+
+  - Possible inputs
+    - From other servers
+      - location information of mobile clients
+    - From clients
+      - location information of themselves
+      - query on other clients locations 
+
+  - Possible messages
+    - IAMAT $CLIENT_ID $CLI_COORD $TIME
+    - WHATSAT $CLI_ID $RADIUS $DIST
+    - CLIAT $CLI_ID $CLI_COORD $TIME
