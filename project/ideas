@@ -16,5 +16,12 @@ For server.py
 
   - Possible messages
     - IAMAT $CLIENT_ID $CLI_COORD $TIME
-    - WHATSAT $CLI_ID $RADIUS $DIST
-    - CLIAT $CLI_ID $CLI_COORD $TIME
+    - WHATSAT $CLI_ID $RADIUS $AMT_INFO
+    - CLIAT $OG_SERV $FST_SERV $SERV_TIME $CLI_ID $CLI_COORD $TIME 
+
+  TODOS:
+    NEED to change the Clients to have a server they first talked to
+    The propagation between servers have to have the first server name as well
+
+  - Google Places request
+    - https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY

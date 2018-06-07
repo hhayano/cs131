@@ -2,4 +2,5 @@ _build
 *.sw*
 *.class
 *.MF
-*key
+key.py
+*logs.txt
